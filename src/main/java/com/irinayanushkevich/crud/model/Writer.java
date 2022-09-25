@@ -21,10 +21,6 @@ public class Writer {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -83,7 +79,18 @@ public class Writer {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((posts == null) ? 0 : posts.hashCode());
+        result = prime * result + id.intValue();
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "Writer id:" + id + ", " + firstName + " " + lastName + "\nposts:\n" + posts;
+        return "Writer id: " + id + ", " + firstName + " " + lastName + "\nposts:\n" + posts;
     }
 }

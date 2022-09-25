@@ -1,13 +1,13 @@
 package com.irinayanushkevich.crud.view;
 
-import com.irinayanushkevich.crud.controller.LabelController;
-
 import java.util.Scanner;
 
-public abstract class ParentView {
+public class CommonView {
 
     private final Scanner scanner = new Scanner(System.in);
-    final LabelController lc = new LabelController();
+    private final LabelView lv = new LabelView();
+    private final PostView pv = new PostView();
+    private final WriterView wv = new WriterView();
 
     public void run(String category) {
 
@@ -17,11 +17,11 @@ public abstract class ParentView {
         while (!isFinish) {
             printActions(category);
             act = chooseAction();
-            isFinish = workWithActions(act);
+            isFinish = lv.workWithActions(act);
         }
     }
 
-    public void printActions(String category) {
+    private void printActions(String category) {
         System.out.println("""
                 Choose what you want to do with\t""" + category + """
                 \nPrint 1, 2, 3, 4 or 0:
@@ -33,7 +33,7 @@ public abstract class ParentView {
                 0 - Exit""");
     }
 
-    public int chooseAction() {
+    private int chooseAction() {
 
         int act;
 
@@ -49,6 +49,4 @@ public abstract class ParentView {
         }
         return -1;
     }
-
-    public abstract boolean workWithActions(int act);
 }

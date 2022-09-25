@@ -17,24 +17,10 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
 
     private final File file = new File("C:\\Users\\Irene\\IdeaProjects\\CRUDAPP\\src\\main\\resources\\labels.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private List<Label> labels = new ArrayList<>();
 
-
-   /* public List<Label> getLabels() {
-        return labels;
-    }
-
-    public void setLabels(List<Label> labels) {
-        this.labels = labels;
-    }*/
-
-    public long generateId() {
+    private long generateId() {
+        List<Label> labels = readFile();
         long id = 0;
-        labels = readFile();
-
-        if (labels == null) {
-            labels = new ArrayList<>();
-        }
         Optional<Label> l = labels.stream().max(Comparator.comparing(Label::getId));
         if (l.isPresent()) {
             id = l.get().getId() + 1;
@@ -43,12 +29,14 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
     }
 
     private List<Label> readFile() {
-        List<Label> l = null;
-
+        List<Label> l = new ArrayList<>();
         try (Reader reader = new FileReader(file)) {
             Type type = new TypeToken<ArrayList<Label>>() {
             }.getType();
             l = new Gson().fromJson(reader, type);
+            if (l == null) {
+                l = new ArrayList<>();
+            }
         } catch (IOException e) {
             System.out.println("File doesn't exist");
         }
@@ -59,67 +47,65 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
         try (Writer writer = new FileWriter(file)) {
             gson.toJson(labels, writer);
         } catch (IOException e) {
-            System.out.println("Writing file  error: " + e);
+            System.out.println("Writing file error: " + e);
         }
     }
 
     public Label create(Label entity) {
-        labels.add(entity);
-        writeFile(labels);
-        return entity;
+        Label newLabel;
+        List<Label> labels = readFile();
+        long id = generateId();
+        if (checkName(entity.getName())) {
+            newLabel = null;
+        } else {
+            newLabel = new Label(id, entity.getName());
+            labels.add(newLabel);
+            writeFile(labels);
+        }
+        return newLabel;
     }
 
-
-    public boolean checkId(long id) {
-        boolean matching;
-        labels = readFile();
-
-        if (labels == null) {
-            matching = false;
-        } else {
-            matching = labels.stream().anyMatch(label -> label.getId().equals(id));
-        }
-        return matching;
-    }
-
-    public boolean checkName(String name) {
-        boolean matching;
-        labels = readFile();
-
-        if (labels == null) {
-            matching = false;
-        } else {
-            matching = labels.stream().anyMatch(label -> label.getName().equals(name));
-        }
-        return matching;
+    private boolean checkName(String name) {
+        List<Label> labels = readFile();
+        return labels.stream().anyMatch(label -> label.getName().equals(name));
     }
 
     public Label getById(Long id) {
-        Label l;
+        List<Label> labels = readFile();
         long finalId = id;
-        labels = readFile();
-
-        if (labels == null) {
-            l = null;
-        } else {
-            l = labels.stream().filter(label -> label.getId().equals(finalId)).findFirst().orElse(null);
-        }
-        return l;
+        return labels.stream().filter(label -> label.getId().equals(finalId)).findFirst().orElse(null);
     }
 
+    private boolean checkId(long id) {
+        List<Label> labels = readFile();
+        return labels.stream().anyMatch(label -> label.getId().equals(id));
+    }
 
     public Label edit(Label entity) {
-        Label lOld = getById(entity.getId());
-        lOld.setName(entity.getName());
-        writeFile(labels);
-        return lOld;
+        List<Label> labels = readFile();
+        long id = entity.getId();
+        String name = entity.getName();
+        Label editLabel = getById(id);
+        if (editLabel != null) {
+            if (!checkName(name)) {
+                labels.remove(editLabel);
+                labels.add(entity);
+                writeFile(labels);
+                editLabel = entity;
+            }
+        }
+        return editLabel;
     }
 
     public Label delete(Long id) {
+        List<Label> labels = readFile();
+        Label lDel = null;
         long lId = id;
-        Label lDel = getById(id);
-        labels.remove(labels.get((int) lId));
-        writeFile(labels);
+        if (checkId(lId)) {
+            lDel = getById(id);
+            labels.remove(labels.get((int) lId));
+            writeFile(labels);
+        }
         return lDel;
     }
 

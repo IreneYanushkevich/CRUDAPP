@@ -17,10 +17,6 @@ public class Label {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -43,20 +39,20 @@ public class Label {
         } else if (!name.equals(l.name)) {
             return false;
         }
-        return id == l.id;
+        return id.equals(l.id);
     }
 
-    /*@Override
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result +  (int) id();
+        result = prime * result + id.intValue();
         return result;
-    }*/
+    }
 
     @Override
     public String toString() {
-        return "Label id:" + id + ": #" + name;
+        return "Label id: " + id + " - " + name;
     }
 }

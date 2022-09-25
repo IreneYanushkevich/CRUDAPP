@@ -3,9 +3,8 @@ package com.irinayanushkevich.crud.view;
 import java.util.Scanner;
 
 public class Console {
-
-    private final LabelView lv = new LabelView();
     private final Scanner scanner = new Scanner(System.in);
+    private final CommonView comView = new CommonView();
 
     public void activateConsole() {
 
@@ -19,7 +18,7 @@ public class Console {
         }
     }
 
-    public void printMenu() {
+    private void printMenu() {
         System.out.println("""
                 What category would you like to work with? Print 1, 2, 3 or 0:
                 1 - Writer
@@ -28,7 +27,7 @@ public class Console {
                 0 - Exit""");
     }
 
-    public int getAnswer() {
+    private int getAnswer() {
 
         int answer;
 
@@ -45,11 +44,11 @@ public class Console {
         return -1;
     }
 
-    public boolean workWithCategory(int answer) {
+    private boolean workWithCategory(int answer) {
         switch (answer) {
             // case 1 -> WriterView.showMenu();
             // case 2 -> PostView.showMenu();
-            case 3 -> lv.run("label");
+            case 3 -> comView.run("label");
             case 0 -> {
                 return true;
             }
