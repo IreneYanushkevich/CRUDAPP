@@ -7,13 +7,19 @@ import java.util.List;
 
 public class LabelView {
 
+    private final CommonView cv;
+
+    public LabelView(CommonView cv) {
+        this.cv = cv;
+    }
+
     private final LabelController lc = new LabelController();
 
     public boolean workWithActions(int act) {
         switch (act) {
             case 1 -> {
-                System.out.println("Set a name of the label >>>");
-                Label label = lc.create();
+                String name = cv.askName();
+                Label label = lc.create(name);
                 if (label == null) {
                     System.out.println("Label with that name already exists.");
                 } else {
@@ -21,25 +27,20 @@ public class LabelView {
                 }
             }
             case 2 -> {
-                System.out.println("Enter the id >>>");
-                Label label = lc.getById();
-                if (checkNull(label)) {
-                    System.out.println("Label what you looked for: " + label);
-                }
+                Long id = cv.askId();
+                Label label = lc.getById(id);
+                printResult(label);
             }
             case 3 -> {
-                System.out.println("Input id + 'Enter', then input new name for this position + 'Enter' >>>");
-                Label label = lc.edit();
-                if (checkNull(label)) {
-                    System.out.println("Edited position (if new name wasn't use before): " + label);
-                }
+                Long id = cv.askId();
+                String name = cv.askName();
+                Label label = lc.edit(new Label(id, name));
+                printResult(label);
             }
             case 4 -> {
-                System.out.println("Enter the index of the position you want to delete >>>");
-                Label label = lc.delete();
-                if (checkNull(label)) {
-                    System.out.println("Deleted position: " + label);
-                }
+                Long id = cv.askId();
+                Label label = lc.delete(id);
+                printResult(label);
             }
             case 5 -> {
                 List<Label> labels = lc.getAll();
@@ -56,12 +57,11 @@ public class LabelView {
         return false;
     }
 
-    private boolean checkNull(Label label) {
-        boolean result = true;
+    private void printResult(Label label) {
         if (label == null) {
-            result = false;
             System.out.println("A label with this index doesn't exist.");
+        } else {
+            System.out.println("Done! Work with the next object is completed: " + label);
         }
-        return result;
     }
 }

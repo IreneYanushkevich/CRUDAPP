@@ -10,7 +10,7 @@ public interface GenericRepository<T, ID> {
 
     T getById(ID id);
 
-    T delete(ID id);
+    boolean delete(ID id);
 
     List<T> getAll();
 

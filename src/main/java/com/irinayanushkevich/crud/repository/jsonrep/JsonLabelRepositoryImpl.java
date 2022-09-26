@@ -18,8 +18,7 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
     private final File file = new File("C:\\Users\\Irene\\IdeaProjects\\CRUDAPP\\src\\main\\resources\\labels.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private long generateId() {
-        List<Label> labels = readFile();
+    private long generateId(List<Label> labels) {
         long id = 0;
         Optional<Label> l = labels.stream().max(Comparator.comparing(Label::getId));
         if (l.isPresent()) {
@@ -54,7 +53,7 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
     public Label create(Label entity) {
         Label newLabel;
         List<Label> labels = readFile();
-        long id = generateId();
+        long id = generateId(labels);
         if (checkName(entity.getName())) {
             newLabel = null;
         } else {
@@ -97,16 +96,17 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
         return editLabel;
     }
 
-    public Label delete(Long id) {
+    public boolean delete(Long id) {
+        boolean delSuccess = false;
         List<Label> labels = readFile();
-        Label lDel = null;
         long lId = id;
         if (checkId(lId)) {
-            lDel = getById(id);
-            labels.remove(labels.get((int) lId));
+            Label lDel = getById(id);
+            labels.remove(lDel);
             writeFile(labels);
+            delSuccess = true;
         }
-        return lDel;
+        return delSuccess;
     }
 
     public List<Label> getAll() {

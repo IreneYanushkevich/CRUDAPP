@@ -1,54 +1,35 @@
 package com.irinayanushkevich.crud.controller;
 
 import com.irinayanushkevich.crud.model.Label;
+import com.irinayanushkevich.crud.repository.LabelRepository;
 import com.irinayanushkevich.crud.repository.jsonrep.JsonLabelRepositoryImpl;
 
-import java.util.*;
+import java.util.List;
 
 public class LabelController {
+    private final LabelRepository jsonRep = new JsonLabelRepositoryImpl();
 
-    private final Scanner sc = new Scanner(System.in);
-    private final JsonLabelRepositoryImpl jsonRep = new JsonLabelRepositoryImpl();
-
-    public Label create() {
-        String name = askName();
-        long id = -1;
+    public Label create(String name) {
+        Long id = null;
         Label l = new Label(id, name);
         return jsonRep.create(l);
     }
 
-    public Label getById() {
-        long id = askId();
+    public Label getById(Long id) {
         return jsonRep.getById(id);
     }
 
-    private String askName() {
-        return sc.nextLine();
+    public Label edit(Label label) {
+        return jsonRep.edit(label);
     }
 
-    private long askId() {
-        long id;
-        while (true) {
-            try {
-                id = Integer.parseInt(sc.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Try again.");
-            }
+    public Label delete(Long id) {
+        Label result = null;
+        Label delLabel = jsonRep.getById(id);
+        if (jsonRep.delete(id)) {
+            result = delLabel;
         }
-        return id;
-    }
-
-    public Label edit() {
-        long id = askId();
-        String newName = askName();
-        Label editLabel = new Label(id, newName);
-        return jsonRep.edit(editLabel);
-    }
-
-    public Label delete() {
-        long delId = askId();
-        return jsonRep.delete(delId);
+        return result;
     }
 
     public List<Label> getAll() {

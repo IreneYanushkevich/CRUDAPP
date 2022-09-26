@@ -5,9 +5,10 @@ import java.util.Scanner;
 public class CommonView {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final LabelView lv = new LabelView();
-    private final PostView pv = new PostView();
-    private final WriterView wv = new WriterView();
+    private final LabelView lv = new LabelView(this);
+
+    //private final PostView pv = new PostView();
+    //private final WriterView wv = new WriterView();
 
     public void run(String category) {
 
@@ -48,5 +49,24 @@ public class CommonView {
             System.out.println("Invalid input. Try again.");
         }
         return -1;
+    }
+
+    public String askName() {
+        System.out.println("Set a name of the label >>>");
+        return scanner.nextLine();
+    }
+
+    public long askId() {
+        long id;
+        System.out.println("Enter the id of the position >>>");
+        while (true) {
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Try again.");
+            }
+        }
+        return id;
     }
 }
