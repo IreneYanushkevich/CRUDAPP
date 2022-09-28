@@ -1,22 +1,20 @@
 package com.irinayanushkevich.crud.model;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 public class Post {
 
     private Long id;
     private String content;
-    private LocalDate created;
-    private LocalDate updated;
+    private String created;
+    private String updated;
     private List<Label> labels;
+    private PostStatus status;
 
-    public Post(Long id, String content, LocalDate created, LocalDate updated) {
+    public Post(Long id, String content, List<Label> labels) {
         this.id = id;
         this.content = content;
-        this.created = created;
-        this.updated = updated;
-        labels = new ArrayList<>();
+        this.labels = labels;
     }
 
     public Long getId() {
@@ -35,19 +33,19 @@ public class Post {
         this.content = content;
     }
 
-    public LocalDate isCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
-    public LocalDate isUpdated() {
+    public String getUpdated() {
         return updated;
     }
 
-    public void setUpdated(LocalDate updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
     }
 
@@ -59,9 +57,13 @@ public class Post {
         this.labels = labels;
     }
 
-    /*public void addLabel(Label... label) {
-        labels.addAll(Arrays.stream(label).toList());
-    }*/
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -82,7 +84,28 @@ public class Post {
         } else if (!labels.equals(p.labels)) {
             return false;
         }
-        return id.intValue() == p.id.intValue() && created == p.created && updated == p.updated;
+        if (updated == null) {
+            if (p.updated != null) {
+                return false;
+            }
+        } else if (!updated.equals(p.updated)) {
+            return false;
+        }
+        if (created == null) {
+            if (p.created != null) {
+                return false;
+            }
+        } else if (!created.equals(p.created)) {
+            return false;
+        }
+        if (status == null) {
+            if (p.status != null) {
+                return false;
+            }
+        } else if (!status.equals(p.status)) {
+            return false;
+        }
+        return id.intValue() == p.id.intValue();
     }
 
     @Override
@@ -93,13 +116,14 @@ public class Post {
         result = prime * result + ((labels == null) ? 0 : labels.hashCode());
         result = prime * result + ((created == null) ? 0 : created.hashCode());
         result = prime * result + ((updated == null) ? 0 : updated.hashCode());
+        result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + id.intValue();
         return result;
     }
 
     @Override
     public String toString() {
-        return "Post id:" + id + ", created: " + created + ", updated: " + updated +
+        return "\nPost id:" + id + ", created: " + created + ", updated: " + updated + ", status: " + status +
                 ",\nlabels: " + labels + "\ncontent:\n" + content;
     }
 }

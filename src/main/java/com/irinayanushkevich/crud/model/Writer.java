@@ -1,6 +1,5 @@
 package com.irinayanushkevich.crud.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Writer {
@@ -10,15 +9,19 @@ public class Writer {
     private String lastName;
     private List<Post> posts;
 
-    public Writer(Long id, String firstName, String lastName) {
+    public Writer(Long id, String firstName, String lastName, List<Post> posts) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        posts = new ArrayList<>();
+        this.posts = posts;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -43,10 +46,6 @@ public class Writer {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
-    }
-
-    public void addPost(Post post) {
-        posts.add(post);
     }
 
     @Override
@@ -91,6 +90,6 @@ public class Writer {
 
     @Override
     public String toString() {
-        return "Writer id: " + id + ", " + firstName + " " + lastName + "\nposts:\n" + posts;
+        return "\nWriter id: " + id + ", " + firstName + " " + lastName + "\nposts:\n" + posts;
     }
 }

@@ -1,9 +1,6 @@
 package com.irinayanushkevich.crud.view;
 
-import java.util.Scanner;
-
 public class Console {
-    private final Scanner scanner = new Scanner(System.in);
     private final CommonView comView = new CommonView();
 
     public void activateConsole() {
@@ -13,42 +10,26 @@ public class Console {
 
         while (!isFinish) {
             printMenu();
-            choice = getAnswer();
+            choice = comView.getAnswer(0, 3);
             isFinish = workWithCategory(choice);
         }
     }
 
     private void printMenu() {
         System.out.println("""
-                What category would you like to work with? Print 1, 2, 3 or 0:
+                \nWhat category would you like to work with? Print 1, 2, 3 or 0:
                 1 - Writer
                 2 - Post
                 3 - Label
-                0 - Exit""");
-    }
-
-    private int getAnswer() {
-
-        int answer;
-
-        try {
-            answer = Integer.parseInt(scanner.nextLine());
-            if (answer < 0 || answer > 3) {
-                System.out.println("You can choose only 1, 2, 3 or 0!");
-            } else {
-                return answer;
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Try again.");
-        }
-        return -1;
+                0 - Exit
+                """);
     }
 
     private boolean workWithCategory(int answer) {
         switch (answer) {
-            // case 1 -> WriterView.showMenu();
-            // case 2 -> PostView.showMenu();
-            case 3 -> comView.run("label");
+            case 1 -> comView.run("writer");
+            case 2 -> comView.run("post");
+            case 3 -> comView.run( "label");
             case 0 -> {
                 return true;
             }

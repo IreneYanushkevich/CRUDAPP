@@ -18,13 +18,53 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
     private final File file = new File("C:\\Users\\Irene\\IdeaProjects\\CRUDAPP\\src\\main\\resources\\labels.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private long generateId(List<Label> labels) {
-        long id = 0;
-        Optional<Label> l = labels.stream().max(Comparator.comparing(Label::getId));
-        if (l.isPresent()) {
-            id = l.get().getId() + 1;
+    public Label create(Label entity) {
+        Label newLabel;
+        List<Label> labels = readFile();
+        long id = generateId(labels);
+        if (checkName(entity.getName())) {
+            newLabel = null;
+        } else {
+            newLabel = new Label(id, entity.getName());
+            labels.add(newLabel);
+            writeFile(labels);
         }
-        return id;
+        return newLabel;
+    }
+
+    public Label getById(Long id) {
+        List<Label> labels = readFile();
+        return labels.stream().filter(label -> label.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Label edit(Label entity) {
+        List<Label> labels = readFile();
+        long id = entity.getId();
+        String name = entity.getName();
+        if (!checkName(name)) {
+            Label editLabel = getById(id);
+            labels.remove(editLabel);
+            labels.add(entity);
+            writeFile(labels);
+            return entity;
+        } else
+            return null;
+    }
+
+    public boolean delete(Long id) {
+        boolean delSuccess = false;
+        List<Label> labels = readFile();
+        Label lDel = getById(id);
+        if (lDel != null) {
+            labels.remove(lDel);
+            writeFile(labels);
+            delSuccess = true;
+        }
+        return delSuccess;
+    }
+
+    public List<Label> getAll() {
+        return readFile();
     }
 
     private List<Label> readFile() {
@@ -50,66 +90,17 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
         }
     }
 
-    public Label create(Label entity) {
-        Label newLabel;
-        List<Label> labels = readFile();
-        long id = generateId(labels);
-        if (checkName(entity.getName())) {
-            newLabel = null;
-        } else {
-            newLabel = new Label(id, entity.getName());
-            labels.add(newLabel);
-            writeFile(labels);
+    private long generateId(List<Label> labels) {
+        long id = 0;
+        Optional<Label> l = labels.stream().max(Comparator.comparing(Label::getId));
+        if (l.isPresent()) {
+            id = l.get().getId() + 1;
         }
-        return newLabel;
+        return id;
     }
 
     private boolean checkName(String name) {
         List<Label> labels = readFile();
         return labels.stream().anyMatch(label -> label.getName().equals(name));
-    }
-
-    public Label getById(Long id) {
-        List<Label> labels = readFile();
-        long finalId = id;
-        return labels.stream().filter(label -> label.getId().equals(finalId)).findFirst().orElse(null);
-    }
-
-    private boolean checkId(long id) {
-        List<Label> labels = readFile();
-        return labels.stream().anyMatch(label -> label.getId().equals(id));
-    }
-
-    public Label edit(Label entity) {
-        List<Label> labels = readFile();
-        long id = entity.getId();
-        String name = entity.getName();
-        Label editLabel = getById(id);
-        if (editLabel != null) {
-            if (!checkName(name)) {
-                labels.remove(editLabel);
-                labels.add(entity);
-                writeFile(labels);
-                editLabel = entity;
-            }
-        }
-        return editLabel;
-    }
-
-    public boolean delete(Long id) {
-        boolean delSuccess = false;
-        List<Label> labels = readFile();
-        long lId = id;
-        if (checkId(lId)) {
-            Label lDel = getById(id);
-            labels.remove(lDel);
-            writeFile(labels);
-            delSuccess = true;
-        }
-        return delSuccess;
-    }
-
-    public List<Label> getAll() {
-        return readFile();
     }
 }

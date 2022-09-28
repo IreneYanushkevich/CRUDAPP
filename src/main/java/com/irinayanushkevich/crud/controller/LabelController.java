@@ -7,32 +7,27 @@ import com.irinayanushkevich.crud.repository.jsonrep.JsonLabelRepositoryImpl;
 import java.util.List;
 
 public class LabelController {
-    private final LabelRepository jsonRep = new JsonLabelRepositoryImpl();
+    private final LabelRepository jsonRepL = new JsonLabelRepositoryImpl();
 
     public Label create(String name) {
         Long id = null;
         Label l = new Label(id, name);
-        return jsonRep.create(l);
+        return jsonRepL.create(l);
     }
 
     public Label getById(Long id) {
-        return jsonRep.getById(id);
+        return jsonRepL.getById(id);
     }
 
     public Label edit(Label label) {
-        return jsonRep.edit(label);
+        return jsonRepL.edit(label);
     }
 
-    public Label delete(Long id) {
-        Label result = null;
-        Label delLabel = jsonRep.getById(id);
-        if (jsonRep.delete(id)) {
-            result = delLabel;
-        }
-        return result;
+    public boolean delete(Long id) {
+        return jsonRepL.delete(id);
     }
 
     public List<Label> getAll() {
-        return jsonRep.getAll();
+        return jsonRepL.getAll();
     }
 }
