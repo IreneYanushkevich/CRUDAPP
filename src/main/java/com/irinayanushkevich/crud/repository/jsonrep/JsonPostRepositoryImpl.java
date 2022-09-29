@@ -40,33 +40,35 @@ public class JsonPostRepositoryImpl implements PostRepository {
         return posts.stream().filter(post -> post.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @Override
     public Post edit(Post post) {
         List<Post> posts = readFile();
-        long id = post.getId();
-        Post oldPost = getById(id);
-        post.setStatus(PostStatus.ACTIVE);
-        post.setCreated(oldPost.getCreated());
-        post.setUpdated(setDate());
-        posts.add(post);
-        posts.remove(oldPost);
-        writeFile(posts);
-        return post;
+        Post postAfterEdit = null;
+        for (Post p : posts) {
+            if (p.getId().equals(post.getId())) {
+                p.setStatus(PostStatus.ACTIVE);
+                p.setUpdated(setDate());
+                p.setContent(post.getContent());
+                p.setLabels(post.getLabels());
+                writeFile(posts);
+                postAfterEdit = p;
+                break;
+            }
+        }
+        return postAfterEdit;
     }
 
     @Override
     public boolean delete(Long id) {
-        boolean result = false;
         List<Post> posts = readFile();
-        Post pDel = getById(id);
-        if (pDel != null) {
-            posts.remove(pDel);
-            Post instead = getById(id);
-            instead.setStatus(PostStatus.DELETED);
-            instead.setUpdated(setDate());
-            posts.add(instead);
-            writeFile(posts);
-            result = true;
+        boolean result = false;
+        for (Post p : posts) {
+            if (p.getId().equals(id)) {
+                p.setStatus(PostStatus.DELETED);
+                p.setUpdated(setDate());
+                writeFile(posts);
+                result = true;
+                break;
+            }
         }
         return result;
     }

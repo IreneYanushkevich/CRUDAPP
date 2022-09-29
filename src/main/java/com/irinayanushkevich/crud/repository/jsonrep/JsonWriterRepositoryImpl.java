@@ -32,27 +32,36 @@ public class JsonWriterRepositoryImpl implements WriterRepository {
         return writers.stream().filter(writer -> writer.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @Override
     public Writer edit(Writer writer) {
         List<Writer> writers = readFile();
-        long id = writer.getId();
-        Writer oldWriter = getById(id);
-        writers.remove(oldWriter);
-        writers.add(writer);
-        writeFile(writers);
-        return writer;
+        Writer writerAfterEdit = null;
+        for (Writer w : writers) {
+            if (w.getId().equals(writer.getId())) {
+                w.setFirstName(writer.getFirstName());
+                w.setLastName(writer.getLastName());
+                w.setPosts(writer.getPosts());
+                writeFile(writers);
+                writerAfterEdit = w;
+                break;
+            }
+        }
+        return writerAfterEdit;
     }
 
     @Override
     public boolean delete(Long id) {
-        boolean result = false;
         List<Writer> writers = readFile();
-        Writer wDel = getById(id);
-        if (wDel != null) {
-            writers.remove(wDel);
-            writeFile(writers);
-            result = true;
+        boolean result = false;
+        Writer forDel = null;
+        for (Writer w : writers) {
+            if (w.getId().equals(id)) {
+                forDel = w;
+                result = true;
+                break;
+            }
         }
+        writers.remove(forDel);
+        writeFile(writers);
         return result;
     }
 

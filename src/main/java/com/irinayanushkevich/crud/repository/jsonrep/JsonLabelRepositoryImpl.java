@@ -39,27 +39,32 @@ public class JsonLabelRepositoryImpl implements LabelRepository {
 
     public Label edit(Label entity) {
         List<Label> labels = readFile();
-        long id = entity.getId();
         String name = entity.getName();
-        if (!checkName(name)) {
-            Label editLabel = getById(id);
-            labels.remove(editLabel);
-            labels.add(entity);
-            writeFile(labels);
-            return entity;
-        } else
-            return null;
+        Label label = null;
+        for (Label l : labels) {
+            if (l.getId().equals(entity.getId()) && !checkName(name)) {
+                l.setName(name);
+                label = l;
+                writeFile(labels);
+                break;
+            }
+        }
+        return label;
     }
 
     public boolean delete(Long id) {
-        boolean delSuccess = false;
         List<Label> labels = readFile();
-        Label lDel = getById(id);
-        if (lDel != null) {
-            labels.remove(lDel);
-            writeFile(labels);
-            delSuccess = true;
+        boolean delSuccess = false;
+        Label forDel = null;
+        for (Label l : labels) {
+            if (l.getId().equals(id)) {
+                forDel = l;
+                delSuccess = true;
+                break;
+            }
         }
+        labels.remove(forDel);
+        writeFile(labels);
         return delSuccess;
     }
 

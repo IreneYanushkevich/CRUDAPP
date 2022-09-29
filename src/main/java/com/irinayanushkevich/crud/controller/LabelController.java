@@ -19,7 +19,8 @@ public class LabelController {
         return jsonRepL.getById(id);
     }
 
-    public Label edit(Label label) {
+    public Label edit(Long id, String name) {
+        Label label = new Label(id, name);
         return jsonRepL.edit(label);
     }
 

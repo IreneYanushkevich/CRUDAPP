@@ -30,7 +30,7 @@ public class LabelView {
                 Long id = cv.askId();
                 if (lc.getById(id) != null) {
                     String name = cv.askString("Set a new name >>>>");
-                    Label label = lc.edit(new Label(id, name));
+                    Label label = lc.edit(id, name);
                     cv.printResultName(label);
                 } else {
                     System.out.println("Label with this index doesn't exist.");
