@@ -23,7 +23,7 @@ public class WriterView {
                 String firstName = cv.askString("Please, input your name >>>>");
                 String lastName = cv.askString("Please, input your last name >>>>");
                 List<Post> chosenPosts = choosePosts();
-                Writer writer = wc.create(new Writer(null, firstName, lastName, chosenPosts));
+                Writer writer = wc.create(firstName, lastName, chosenPosts);
                 System.out.println("\nYou created a new writer:\n " + writer);
             }
             case 2 -> {
@@ -99,15 +99,15 @@ public class WriterView {
         switch (choice) {
             case 1 -> {
                 String name = cv.askString("Input a new name >>>");
-                writerAfterEdit = wc.edit(new Writer(id, name, writer.getLastName(), writer.getPosts()));
+                writerAfterEdit = wc.edit(id, name, writer.getLastName(), writer.getPosts());
             }
             case 2 -> {
                 String secondName = cv.askString("Input a new second name >>>");
-                writerAfterEdit = wc.edit(new Writer(id, writer.getFirstName(), secondName, writer.getPosts()));
+                writerAfterEdit = wc.edit(id, writer.getFirstName(), secondName, writer.getPosts());
             }
             case 3 -> {
                 List<Post> posts = choosePosts();
-                writerAfterEdit = wc.edit(new Writer(id, writer.getFirstName(), writer.getLastName(), posts));
+                writerAfterEdit = wc.edit(id, writer.getFirstName(), writer.getLastName(), posts);
             }
             case 0 -> {
             }

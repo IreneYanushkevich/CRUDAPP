@@ -1,5 +1,6 @@
 package com.irinayanushkevich.crud.controller;
 
+import com.irinayanushkevich.crud.model.Post;
 import com.irinayanushkevich.crud.model.Writer;
 import com.irinayanushkevich.crud.repository.WriterRepository;
 import com.irinayanushkevich.crud.repository.jsonrep.JsonWriterRepositoryImpl;
@@ -10,7 +11,8 @@ public class WriterController {
 
     private final WriterRepository jsonRepW = new JsonWriterRepositoryImpl();
 
-    public Writer create(Writer writer) {
+    public Writer create(String firstName, String secondName, List<Post> posts) {
+        Writer writer = new Writer(null, firstName, secondName, posts);
         return jsonRepW.create(writer);
     }
 
@@ -18,7 +20,8 @@ public class WriterController {
         return jsonRepW.getById(id);
     }
 
-    public Writer edit(Writer writer) {
+    public Writer edit(Long id, String firstName, String secondName, List<Post> posts) {
+        Writer writer = new Writer(id, firstName, secondName, posts);
         return jsonRepW.edit(writer);
     }
 

@@ -64,7 +64,7 @@ public class PostView {
     protected Post preparePostData() {
         String content = cv.askString("Please, write your post content >>>>");
         List<Label> chosenLabels = chooseLabels();
-        return pc.create(new Post(null, content, chosenLabels));
+        return pc.create(content, chosenLabels);
     }
 
     private List<Label> chooseLabels() {
@@ -115,18 +115,18 @@ public class PostView {
         switch (choice) {
             case 1 -> {
                 String content = cv.askString("Please, write your post content >>>>>>");
-                postAfterEdit = pc.edit(new Post(id, content, post.getLabels()));
+                postAfterEdit = pc.edit(id, content, post.getLabels());
             }
             case 2 -> {
                 List<Label> labels = chooseLabels();
-                postAfterEdit = pc.edit(new Post(id, post.getContent(), labels));
+                postAfterEdit = pc.edit(id, post.getContent(), labels);
             }
             case 3 -> {
                 String content = cv.askString("Please, write your post content >>>>>>");
                 List<Label> labels = chooseLabels();
-                postAfterEdit = pc.edit(new Post(id, content, labels));
+                postAfterEdit = pc.edit(id, content, labels);
             }
-            case 4 -> postAfterEdit = pc.edit(post);
+            case 4 -> postAfterEdit = pc.edit(id, post.getContent(), post.getLabels());
             case 0 -> {
             }
         }

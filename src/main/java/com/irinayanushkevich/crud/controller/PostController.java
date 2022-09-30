@@ -1,5 +1,6 @@
 package com.irinayanushkevich.crud.controller;
 
+import com.irinayanushkevich.crud.model.Label;
 import com.irinayanushkevich.crud.model.Post;
 import com.irinayanushkevich.crud.repository.PostRepository;
 import com.irinayanushkevich.crud.repository.jsonrep.JsonPostRepositoryImpl;
@@ -11,7 +12,8 @@ public class PostController {
     private final PostRepository jsonRepP = new JsonPostRepositoryImpl();
 
 
-    public Post create(Post post) {
+    public Post create(String content, List<Label> labels) {
+        Post post = new Post(null, content, labels);
         return jsonRepP.create(post);
     }
 
@@ -20,7 +22,8 @@ public class PostController {
     }
 
 
-    public Post edit(Post post) {
+    public Post edit(Long id, String content, List<Label> labels) {
+        Post post = new Post(id, content, labels);
         return jsonRepP.edit(post);
     }
 
