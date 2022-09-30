@@ -31,7 +31,7 @@ class JsonWriterRepositoryImpl implements WriterRepository
 
 ## ИНСТРУКЦИЯ ПО ЗАПУСКУ ПРИЛОЖЕНИЯ ЧЕРЕЗ КОМАНДНУЮ СТРОКУ
 Предварительно убедитесь, что на вашем компьютере установлены JVM и JRE. 
-1. Скачать программу CRUDAPP.jar по ссылке https://github.com/IreneYanushkevich/CRUDAPP/raw/master/CRUDAPP.jar      
+1. Скачать программу CRUDAPP.jar по ссылке https://github.com/IreneYanushkevich/CRUDAPP/blob/master/CRUDAPP.jar 
 2. Вызвать командную строку сочетанием клавиш WIN+R.
 3. Прописать в командной строке: cd пробел и путь к папке со скачанной программой + Enter (пример: 
    C:\Users\Irene>cd C:\Users\Irene\IdeaProjects\CRUDAPP\out\artifacts\CRUDAPP_jar)
